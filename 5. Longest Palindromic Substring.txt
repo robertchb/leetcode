@@ -1,0 +1,50 @@
+/*
+【是否通过】通过
+【执行用时】24 ms
+【内存消耗】7.2 MB
+【是否双百】否
+*/
+#include <stdio.h>
+#include <stdlib.h>
+
+#include "securec.h"
+
+#define MIN(a, b)    ((a) > (b) ? (b) : (a))
+#define MATRIXNUMBER 1001
+char *longestPalindrome(char *s)
+{
+    if (s == NULL) {
+        return s;
+    }
+    int best = 0;
+    int n = strlen(s);
+    char *res = (char *)malloc(sizeof(char) * MATRIXNUMBER);
+    memset(res, 0, MATRIXNUMBER);
+    for (int center = 0; center < n; center++) {
+        int len = 1;
+        int x;
+        for (x = 1; x <= MIN(center, n - (center + 1)) && s[center - x] == s[center + x]; x++) {
+            len = len + 2;
+        }
+        if (len > best) {
+            best = len;
+            memset(res, 0, MATRIXNUMBER);
+            strncpy(res, s + center - x + 1, len);
+        }
+    }
+    for (int center = 0; (center + 1) < n; center++)
+        if (s[center] == s[center + 1]) {
+            int len = 2;
+            int x;
+            for (x = 1; x <= MIN(center, n - (center + 2)) && s[center - x] == s[center + 1 + x]; x++) {
+                len = len + 2;
+            }
+            if (len > best) {
+                best = len;
+                memset(res, 0, MATRIXNUMBER);
+                strncpy(res, s + center - x + 1, len);
+            }
+        }
+
+    return res;
+}

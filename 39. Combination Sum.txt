@@ -1,0 +1,31 @@
+class Solution {
+public:
+    vector<vector<int>> res;
+    
+	void combinationSumHelp(vector<int>& candidates, int index, int target, vector<int> &q)  //一开始做题的时候没有考虑加入index变量，这样就导致了有重复的数组出现
+	{
+		if(target == 0) {
+			res.push_back(q);
+			return;
+		}
+		for(int i = index; i < candidates.size(); i++) {
+			if(candidates[i] <= target) {
+				q.push_back(candidates[i]);
+				combinationSumHelp(candidates, i, target - candidates[i], q);
+				q.pop_back();
+            } else {
+                continue; //一开始这边写成了return，注意不能return，因为还需要遍历for循环之后的可能。
+            }
+		}
+		return;
+		
+	}
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+        res.clear();
+        if(candidates.size() <= 0 || target < 0)
+			return res;
+		vector<int> q;
+		combinationSumHelp(candidates, 0, target, q);
+		return res;
+    }
+};

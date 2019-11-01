@@ -1,0 +1,48 @@
+/**
+ * Return an array of arrays of size *returnSize.
+ * The sizes of the arrays are returned as *returnColumnSizes array.
+ * Note: Both returned array and *columnSizes array must be malloced, assume caller calls free().
+ */
+ int glVisited[10240]; //创建得空间用来存储访问过的变量
+ int glArr[10240];
+ int glPos = 0; //判断数字在当前的位置
+ int glNumber = 0;
+ void permuteHelp(int* nums, int numsSize, int** res)
+ {
+	 if(glPos == numsSize)
+	 {
+		 res[glNumber] = (int*)malloc(sizeof(int) * numsSize); 
+		 memcpy(res[glNumber], glArr, sizeof(int) * numsSize);
+         glNumber++;
+		 return ;
+	 }
+	 for(int i = 0; i < numsSize; i++) {
+		 if(glVisited[i]) {
+			 continue;
+		 }
+		 glArr[glPos++] = nums[i]; 
+		 glVisited[i] = true;
+		 permuteHelp(nums, numsSize, res);
+		 /*回溯*/
+		 glArr[glPos--];
+		 glVisited[i] = false;
+	 }
+
+ }
+ 
+ 
+int** permute(int* nums, int numsSize, int* returnSize, int** returnColumnSizes)
+{
+	glPos = 0;
+	glNumber = 0;
+	memset(glVisited, false, sizeof(glVisited));
+	int** res = (int**)malloc(sizeof(int*) * 10240);
+	permuteHelp (nums, numsSize, res);
+	*returnSize = glNumber;
+	*returnColumnSizes = malloc(sizeof(int *) * glNumber);
+    for (int i = 0; i < glNumber; i++) {
+        (*returnColumnSizes)[i] = numsSize;
+    }
+	return res;
+	
+}
